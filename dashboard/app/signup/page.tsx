@@ -154,23 +154,10 @@ export default function SignupPage() {
                 Create your SolTrace account
               </p>
 
-              {googleClientId && (
-                <>
-                  <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 16 }}>
-                    <div ref={googleBtnRef} />
-                  </div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16 }}>
-                    <div style={{ flex: 1, height: 1, background: 'var(--border)' }} />
-                    <span style={{ fontFamily: 'var(--mono)', fontSize: 9, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '2px' }}>or</span>
-                    <div style={{ flex: 1, height: 1, background: 'var(--border)' }} />
-                  </div>
-                </>
-              )}
-
               <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
                 <div>
-                  <label style={{ fontFamily: 'var(--mono)', fontSize: 10, color: 'var(--text-muted)', display: 'block', marginBottom: 6, letterSpacing: '1px', textTransform: 'uppercase' }}>Username</label>
-                  <input className="input" style={{ width: '100%' }} placeholder="Choose a username" value={username} onChange={(e) => setUsername(e.target.value)} autoFocus={!googleClientId} />
+                  <label style={{ fontFamily: 'var(--mono)', fontSize: 10, color: 'var(--text-muted)', display: 'block', marginBottom: 6, letterSpacing: '1px', textTransform: 'uppercase' }}>Email address</label>
+                  <input className="input" style={{ width: '100%' }} placeholder="Enter email address" value={username} onChange={(e) => setUsername(e.target.value)} autoFocus />
                 </div>
                 <div>
                   <label style={{ fontFamily: 'var(--mono)', fontSize: 10, color: 'var(--text-muted)', display: 'block', marginBottom: 6, letterSpacing: '1px', textTransform: 'uppercase' }}>Password</label>
@@ -183,6 +170,19 @@ export default function SignupPage() {
                   {submitting ? 'Creating account...' : 'Create account'}
                 </button>
               </form>
+
+              {googleClientId && (
+                <>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginTop: 20, marginBottom: 16 }}>
+                    <div style={{ flex: 1, height: 1, background: 'var(--border)' }} />
+                    <span style={{ fontFamily: 'var(--mono)', fontSize: 9, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '2px' }}>or</span>
+                    <div style={{ flex: 1, height: 1, background: 'var(--border)' }} />
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 4 }}>
+                    <div ref={googleBtnRef} />
+                  </div>
+                </>
+              )}
 
               <div style={{ textAlign: 'center', marginTop: 20, fontSize: 12, color: 'var(--text-secondary)' }}>
                 Already have an account?{' '}
