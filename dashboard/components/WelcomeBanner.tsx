@@ -8,7 +8,7 @@ interface HealthData {
 }
 
 export default function WelcomeBanner() {
-  const { data } = useApi<HealthData>('/health', { interval: 5000 });
+  const { data } = useApi<HealthData>('/health', { interval: 5000, public: true });
   const isOk = data?.status === 'ok';
 
   return (

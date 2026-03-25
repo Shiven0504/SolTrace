@@ -1,12 +1,15 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
+import { useAuth } from './useAuth';
 
 const BASE_URL = '/api';
 
 interface UseApiOptions {
   autoFetch?: boolean;
   interval?: number | null;
+  /** If true, fetch even without auth token (for public endpoints like /health) */
+  public?: boolean;
 }
 
 interface UseApiReturn<T> {
@@ -20,18 +23,25 @@ export function useApi<T = unknown>(
   endpoint: string,
   options: UseApiOptions = {}
 ): UseApiReturn<T> {
-  const { autoFetch = true, interval = null } = options;
+  const { autoFetch = true, interval = null, public: isPublic = false } = options;
+  const { token } = useAuth();
   const [data, setData] = useState<T | null>(null);
   const [loading, setLoading] = useState(autoFetch);
   const [error, setError] = useState<string | null>(null);
 
   const fetchData = useCallback(async () => {
+    const currentToken = typeof window !== 'undefined' ? localStorage.getItem('soltrace-token') : null;
+    if (!isPublic && !currentToken) {
+      setData(null);
+      setLoading(false);
+      return;
+    }
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch(`${BASE_URL}${endpoint}`, {
-        headers: { ...getAuthHeaders() },
-      });
+      const headers: Record<string, string> = {};
+      if (currentToken) headers.Authorization = `Bearer ${currentToken}`;
+      const res = await fetch(`${BASE_URL}${endpoint}`, { headers });
       if (!res.ok) {
         const body = await res.json().catch(() => ({}));
         throw new Error(body.error || `HTTP ${res.status}`);
@@ -43,26 +53,29 @@ export function useApi<T = unknown>(
     } finally {
       setLoading(false);
     }
-  }, [endpoint]);
+  }, [endpoint, isPublic]);
+
+  // Clear user-scoped data immediately when token is removed (logout)
+  useEffect(() => {
+    if (!token && !isPublic) {
+      setData(null);
+      setError(null);
+    }
+  }, [token, isPublic]);
 
   useEffect(() => {
-    if (autoFetch) {
+    if (autoFetch && (token || isPublic)) {
       fetchData();
     }
-  }, [autoFetch, fetchData]);
+  }, [autoFetch, fetchData, token, isPublic]);
 
   useEffect(() => {
-    if (!interval) return;
+    if (!interval || (!token && !isPublic)) return;
     const id = setInterval(fetchData, interval);
     return () => clearInterval(id);
-  }, [interval, fetchData]);
+  }, [interval, fetchData, token, isPublic]);
 
   return { data, loading, error, refetch: fetchData };
-}
-
-function getAuthHeaders(): Record<string, string> {
-  const token = typeof window !== 'undefined' ? localStorage.getItem('soltrace-token') : null;
-  return token ? { Authorization: `Bearer ${token}` } : {};
 }
 
 export async function postApi<T = unknown>(endpoint: string, body: unknown): Promise<T> {
@@ -87,4 +100,9 @@ export async function deleteApi(endpoint: string): Promise<void> {
     const data = await res.json().catch(() => ({}));
     throw new Error(data.error || `HTTP ${res.status}`);
   }
+}
+
+function getAuthHeaders(): Record<string, string> {
+  const token = typeof window !== 'undefined' ? localStorage.getItem('soltrace-token') : null;
+  return token ? { Authorization: `Bearer ${token}` } : {};
 }

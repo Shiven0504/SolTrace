@@ -57,6 +57,7 @@ fn internal_error(msg: impl ToString) -> (StatusCode, Json<ErrorResponse>) {
 /// `GET /transfers?wallet=X&direction=deposit&mint=Y&limit=50&offset=0`
 pub async fn list_transfers(
     State(state): State<AppState>,
+    auth: OptionalAuthUser,
     Query(params): Query<TransferParams>,
 ) -> impl IntoResponse {
     let query = TransferQuery {
@@ -65,6 +66,7 @@ pub async fn list_transfers(
         mint: params.mint,
         limit: params.limit.unwrap_or(50).min(1000),
         offset: params.offset.unwrap_or(0),
+        user_id: auth.0.map(|c| c.sub),
     };
 
     match state.pg_store.query_transfers(&query).await {

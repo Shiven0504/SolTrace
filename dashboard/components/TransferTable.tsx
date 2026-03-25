@@ -21,7 +21,7 @@ export default function TransferTable({ searchSig }: TransferTableProps) {
   const sigEndpoint = searchSig ? `/tx/${searchSig}` : null;
 
   const list = useApi<Transfer[]>(listEndpoint, { interval: 8000, autoFetch: !searchSig });
-  const sig = useApi<Transfer[]>(sigEndpoint || '/health', { autoFetch: !!searchSig });
+  const sig = useApi<Transfer[]>(sigEndpoint || '/health', { autoFetch: !!searchSig, public: true });
 
   const transfers = searchSig ? sig.data : list.data;
   const loading = searchSig ? sig.loading : list.loading;

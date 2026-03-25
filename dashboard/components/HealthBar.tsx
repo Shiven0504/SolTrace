@@ -22,7 +22,7 @@ interface Wallet {
 }
 
 export default function HealthBar() {
-  const { data, error } = useApi<HealthData>('/health', { interval: 5000 });
+  const { data, error } = useApi<HealthData>('/health', { interval: 5000, public: true });
   const { data: wallets } = useApi<Wallet[]>('/wallets', { interval: 10000 });
   const { data: backfillJobs } = useApi<BackfillJob[]>('/backfill', { interval: 10000 });
 

@@ -62,6 +62,7 @@ pub struct TransferQuery {
     pub mint: Option<String>,
     pub limit: i64,
     pub offset: i64,
+    pub user_id: Option<i64>,
 }
 
 /// Balance summary for a wallet.
@@ -174,11 +175,8 @@ impl PgStore {
             .fetch_all(&self.pool)
             .await?
         } else {
-            sqlx::query_as::<_, WatchedWallet>(
-                "SELECT wallet_pubkey, label, created_at, user_id FROM watched_wallets ORDER BY created_at DESC",
-            )
-            .fetch_all(&self.pool)
-            .await?
+            // Unauthenticated: return empty list (wallets are user-scoped)
+            Vec::new()
         };
 
         Ok(rows)
@@ -285,13 +283,20 @@ impl PgStore {
 
     /// Query transfers with optional filters.
     pub async fn query_transfers(&self, q: &TransferQuery) -> Result<Vec<TokenTransferRow>, PgError> {
-        // Build dynamic query
+        // Unauthenticated: return empty list (transfers are user-scoped)
+        let user_id = match q.user_id {
+            Some(uid) => uid,
+            None => return Ok(Vec::new()),
+        };
+
+        // Build dynamic query scoped to user's wallets
         let mut sql = String::from(
             "SELECT id, signature, slot, block_time, instruction_idx, program_id, \
              source_account, dest_account, mint, amount, direction, wallet \
-             FROM token_transfers WHERE 1=1",
+             FROM token_transfers WHERE wallet IN \
+             (SELECT wallet_pubkey FROM watched_wallets WHERE user_id = $1)",
         );
-        let mut bind_idx = 1u32;
+        let mut bind_idx = 2u32;
         let mut binds: Vec<String> = Vec::new();
 
         if let Some(ref wallet) = q.wallet {
@@ -316,6 +321,7 @@ impl PgStore {
         sql.push_str(&format!(" OFFSET ${bind_idx}"));
 
         let mut query = sqlx::query_as::<_, TokenTransferRow>(&sql);
+        query = query.bind(user_id);
         for b in &binds {
             query = query.bind(b);
         }
