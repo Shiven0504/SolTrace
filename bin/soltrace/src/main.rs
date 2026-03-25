@@ -245,7 +245,7 @@ async fn main() -> Result<()> {
         redis_cache.clone(),
         wallet_changed_tx,
         backfill_config,
-        idl_registry,
+        idl_registry.clone(),
         Some(jwt_config),
     );
 
@@ -263,7 +263,7 @@ async fn main() -> Result<()> {
         max_backoff_ms: config.ingestion.max_backoff_ms,
     };
 
-    let rpc_listener = RpcListener::new(listener_config, pg_store, redis_cache, wallet_changed_rx);
+    let rpc_listener = RpcListener::new(listener_config, pg_store, redis_cache, wallet_changed_rx, idl_registry.clone());
 
     let ingestion_handle = tokio::spawn(async move {
         if let Err(e) = rpc_listener.run().await {

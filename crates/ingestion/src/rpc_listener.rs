@@ -17,8 +17,9 @@ use tokio::sync::{watch, RwLock};
 
 use soltrace_decoder::account_mapper::AccountMapper;
 use soltrace_decoder::classifier::classify_transfers;
+use soltrace_decoder::idl_decoder::IdlRegistry;
 use soltrace_decoder::{system_program, token_program, TransferEvent};
-use soltrace_storage::{PgStore, RedisCache};
+use soltrace_storage::{PgStore, RedisCache, WebhookDispatcher};
 
 #[derive(Debug, Error)]
 pub enum IngestionError {
@@ -47,6 +48,8 @@ pub struct RpcListener {
     pg_store: PgStore,
     redis_cache: RedisCache,
     account_mapper: Arc<RwLock<AccountMapper>>,
+    webhook_dispatcher: WebhookDispatcher,
+    idl_registry: Arc<RwLock<IdlRegistry>>,
     /// Receives notifications when watched wallets change.
     wallet_changed_rx: watch::Receiver<()>,
 }
@@ -57,12 +60,16 @@ impl RpcListener {
         pg_store: PgStore,
         redis_cache: RedisCache,
         wallet_changed_rx: watch::Receiver<()>,
+        idl_registry: Arc<RwLock<IdlRegistry>>,
     ) -> Self {
+        let webhook_dispatcher = WebhookDispatcher::new(pg_store.clone());
         Self {
             config,
             pg_store,
             redis_cache,
             account_mapper: Arc::new(RwLock::new(AccountMapper::new())),
+            webhook_dispatcher,
+            idl_registry,
             wallet_changed_rx,
         }
     }
@@ -278,6 +285,11 @@ impl RpcListener {
             .await
             .map_err(|e| IngestionError::Storage(e.to_string()))?;
 
+        // Dispatch webhooks (fire-and-forget, failures are logged not propagated)
+        if count > 0 {
+            self.webhook_dispatcher.dispatch(&classified).await;
+        }
+
         Ok(count)
     }
 
@@ -406,6 +418,17 @@ impl RpcListener {
                 Err(e) => {
                     tracing::trace!(error = %e, "token program decode error");
                 }
+            }
+        }
+
+        // Try IDL decoder for any registered Anchor programs
+        if let Ok(registry) = self.idl_registry.try_read() {
+            if let Some(decoded) = registry.decode(program_id, data, accounts) {
+                tracing::debug!(
+                    program = %decoded.program_name,
+                    instruction = %decoded.instruction_name,
+                    "IDL-decoded instruction (non-transfer)"
+                );
             }
         }
 
