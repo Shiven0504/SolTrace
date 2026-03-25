@@ -106,9 +106,10 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
                 backgroundClip: 'text' as const,
+                fontFamily: 'var(--font-display)',
               }}
             >
-              SolTrace
+              Sol<span style={{ fontWeight: 700 }}>Trace</span>
             </h1>
           </Link>
           <p>Blockchain Indexer</p>

@@ -44,8 +44,8 @@ export default function WelcomeBanner() {
         <div style={{ display: 'flex', alignItems: 'baseline', gap: 12, marginBottom: 6 }}>
           <h2
             style={{
-              fontFamily: 'var(--mono)',
-              fontSize: 28,
+              fontFamily: 'var(--font-display)',
+              fontSize: 30,
               fontWeight: 700,
               letterSpacing: '-1px',
               lineHeight: 1,
@@ -53,9 +53,10 @@ export default function WelcomeBanner() {
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
               backgroundClip: 'text',
+              filter: 'drop-shadow(0 0 16px var(--accent-glow))',
             }}
           >
-            SolTrace
+            Sol<span style={{ fontWeight: 700 }}>Trace</span>
           </h2>
           <span
             style={{

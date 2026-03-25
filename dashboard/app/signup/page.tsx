@@ -106,16 +106,17 @@ export default function SignupPage() {
         <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: 10, justifyContent: 'center', marginBottom: 36, textDecoration: 'none', color: 'inherit' }}>
           <Image src={logoSvg} alt="SolTrace" width={32} height={32} />
           <span style={{
-            fontFamily: 'var(--mono)',
-            fontSize: 20,
+            fontFamily: "'Space Grotesk', var(--font)",
+            fontSize: 22,
             fontWeight: 700,
             letterSpacing: '-0.5px',
             background: 'linear-gradient(135deg, var(--accent) 0%, var(--green) 100%)',
             WebkitBackgroundClip: 'text',
             WebkitTextFillColor: 'transparent',
             backgroundClip: 'text',
+            filter: 'drop-shadow(0 0 12px var(--accent-glow))',
           }}>
-            SolTrace
+            Sol<span style={{ fontWeight: 700 }}>Trace</span>
           </span>
         </Link>
 
@@ -151,7 +152,7 @@ export default function SignupPage() {
 
           {!pickUsername ? (
             <>
-              <h1 style={{ fontSize: 22, fontWeight: 700, marginBottom: 4, letterSpacing: '-0.3px' }}>Sign up</h1>
+              <h1 style={{ fontFamily: "'Space Grotesk', var(--font)", fontSize: 24, fontWeight: 700, marginBottom: 4, letterSpacing: '-0.3px' }}>Sign up</h1>
               <p style={{ fontFamily: 'var(--mono)', fontSize: 11, color: 'var(--text-muted)', marginBottom: 24, letterSpacing: '0.5px' }}>
                 Create your SolTrace account
               </p>
@@ -188,14 +189,14 @@ export default function SignupPage() {
 
               <div style={{ textAlign: 'center', marginTop: 20, fontSize: 12, color: 'var(--text-secondary)' }}>
                 Already have an account?{' '}
-                <Link href="/login" style={{ color: 'var(--accent)', fontWeight: 600, fontFamily: 'var(--mono)', fontSize: 12 }}>
+                <Link href="/login" className="auth-link" style={{ color: 'var(--accent)', fontWeight: 600, fontFamily: "'Space Grotesk', var(--font)", fontSize: 12 }}>
                   Sign in
                 </Link>
               </div>
             </>
           ) : (
             <>
-              <h1 style={{ fontSize: 22, fontWeight: 700, marginBottom: 4, letterSpacing: '-0.3px' }}>Choose a username</h1>
+              <h1 style={{ fontFamily: "'Space Grotesk', var(--font)", fontSize: 24, fontWeight: 700, marginBottom: 4, letterSpacing: '-0.3px' }}>Choose a username</h1>
               <p style={{ fontFamily: 'var(--mono)', fontSize: 11, color: 'var(--text-muted)', marginBottom: 24, letterSpacing: '0.5px' }}>
                 Pick a display name for your account
               </p>

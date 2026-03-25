@@ -2,26 +2,26 @@
 
 **A general-purpose Solana blockchain indexer built in Rust.**
 
-SolTrace tracks on-chain events -- deposits, withdrawals, token transfers, and account state changes -- in real time and provides a queryable REST API, webhook system, and live dashboard. Built for teams that need custom indexing infrastructure without depending on rate-limited, expensive third-party APIs.
+SolTrace tracks on-chain events (deposits, withdrawals, token transfers, and account state changes) in real time and provides a queryable REST API, webhook system, and live dashboard. Built for teams that need custom indexing infrastructure without depending on rate-limited, expensive third-party APIs.
 
 ---
 
 ## Feature Highlights
 
 - **Real-time ingestion** via Solana RPC WebSocket subscriptions with automatic reconnection and exponential backoff
-- **CPI-aware decoding** -- processes both outer and inner (CPI) instructions, capturing the ~60-70% of real deposits that happen via CPI (e.g., Jupiter swap outputs)
+- **CPI-aware decoding** that processes both outer and inner (CPI) instructions, capturing the ~60-70% of real deposits that happen via CPI (e.g., Jupiter swap outputs)
 - **Historical backfill engine** with rate limiting, slot-based checkpointing, and resumable jobs
-- **SPL Token + native SOL** -- decodes System Program transfers and SPL Token `Transfer`/`TransferChecked` instructions (Token Program and Token-2022)
-- **Deposit/withdrawal classification** -- labels each transfer based on whether the watched wallet is the source or destination owner
-- **Dynamic Anchor IDL decoding** -- upload any program's IDL via API to enable automatic instruction parsing
-- **Webhook system** -- register HTTP callbacks with filters (wallet, direction, mint, minimum amount) for event-driven integrations
-- **Filter DSL** -- a purpose-built query language: `TRACK transfers WHERE direction = "deposit" AND amount > 1_000_000_000`
+- **SPL Token + native SOL** support, decoding System Program transfers and SPL Token `Transfer`/`TransferChecked` instructions (Token Program and Token-2022)
+- **Deposit/withdrawal classification** that labels each transfer based on whether the watched wallet is the source or destination owner
+- **Dynamic Anchor IDL decoding** lets you upload any program's IDL via API to enable automatic instruction parsing
+- **Webhook system** to register HTTP callbacks with filters (wallet, direction, mint, minimum amount) for event-driven integrations
+- **Filter DSL**, a purpose-built query language: `TRACK transfers WHERE direction = "deposit" AND amount > 1_000_000_000`
 - **JWT authentication** with username/password registration and Google OAuth sign-in
-- **Per-user wallet scoping** -- each user manages their own set of watched wallets
-- **Live dashboard** -- Next.js frontend with stats cards, transfer charts, transfer history table, dark/light theme, and sidebar navigation
-- **Redis caching** -- slot cursor tracking, account owner lookup cache, and stream-based ingestion buffering
-- **Idempotent writes** -- `UNIQUE(signature, instruction_idx)` constraint prevents duplicate entries on replays
-- **Production-ready containerization** -- multi-stage Dockerfile and Docker Compose for one-command local deployment
+- **Per-user wallet scoping** so each user manages their own set of watched wallets
+- **Live dashboard** built with Next.js featuring stats cards, transfer charts, transfer history table, dark/light theme, and sidebar navigation
+- **Redis caching** for slot cursor tracking, account owner lookup cache, and stream-based ingestion buffering
+- **Idempotent writes** using `UNIQUE(signature, instruction_idx)` constraint to prevent duplicate entries on replays
+- **Production-ready containerization** with multi-stage Dockerfile and Docker Compose for one-command local deployment
 
 ---
 
@@ -326,7 +326,7 @@ SOLTRACE__AUTH__GOOGLE_CLIENT_ID=your-google-client-id.apps.googleusercontent.co
 
 ## Deployment
 
-### Backend -- Railway
+### Backend (Railway)
 
 1. Connect your GitHub repository to [Railway](https://railway.app).
 2. Railway will detect the `Dockerfile` and build automatically.
@@ -345,7 +345,7 @@ SOLTRACE__AUTH__GOOGLE_CLIENT_ID=your-google-client-id.apps.googleusercontent.co
 
 5. The backend exposes port 3000 by default. Override with `SOLTRACE__API__PORT` if needed.
 
-### Frontend -- Vercel
+### Frontend (Vercel)
 
 1. Import the `dashboard/` directory as a new project on [Vercel](https://vercel.com).
 2. Set the root directory to `dashboard`.
@@ -360,9 +360,16 @@ SOLTRACE__AUTH__GOOGLE_CLIENT_ID=your-google-client-id.apps.googleusercontent.co
 
 ---
 
-## Dashboard Screenshots
+## Screenshots
 
-*Screenshots will be added here once the dashboard is deployed.*
+### Dashboard Overview
+![Dashboard Overview](docs/screenshots/dashboard-overview.png)
+
+### Transfers
+![Transfers](docs/screenshots/transfers.png)
+
+### Indexer Health
+![Indexer Health](docs/screenshots/indexer-health.png)
 
 ---
 
