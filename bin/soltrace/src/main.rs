@@ -140,6 +140,14 @@ async fn main() -> Result<()> {
 
     let pg_store = PgStore::new(pg_pool);
 
+    // Run initial schema migration (idempotent with IF NOT EXISTS)
+    let initial_schema_sql = include_str!("../../../migrations/001_initial_schema.sql");
+    pg_store
+        .run_migrations(initial_schema_sql)
+        .await
+        .context("failed to run initial schema migration")?;
+    tracing::info!("initial schema migration applied");
+
     // Run Phase 2 migration (idempotent with IF NOT EXISTS)
     let migration_sql = include_str!("../../../migrations/002_phase2_backfill_webhooks_idls.sql");
     pg_store
@@ -163,6 +171,14 @@ async fn main() -> Result<()> {
         .await
         .context("failed to run Google OAuth migrations")?;
     tracing::info!("Google OAuth migrations applied");
+
+    // Run wallet user-scoping migration
+    let wallet_scope_sql = include_str!("../../../migrations/005_wallet_user_scope.sql");
+    pg_store
+        .run_migrations(wallet_scope_sql)
+        .await
+        .context("failed to run wallet user-scope migration")?;
+    tracing::info!("wallet user-scope migration applied");
 
     // Connect to Redis
     let redis_client = redis::Client::open(config.redis.url.as_str())
