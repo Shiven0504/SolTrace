@@ -132,9 +132,6 @@ export default function LoginPage() {
             overflow: 'hidden',
           }}
         >
-          {/* Accent line */}
-          <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 1, background: 'linear-gradient(90deg, var(--accent), var(--green))', opacity: 0.5 }} />
-
           {/* Close button */}
           <button
             onClick={() => router.push('/')}
@@ -190,7 +187,7 @@ export default function LoginPage() {
 
               <div style={{ textAlign: 'center', marginTop: 20, fontSize: 12, color: 'var(--text-secondary)' }}>
                 Don&apos;t have an account?{' '}
-                <Link href="/signup" className="auth-link" style={{ color: 'var(--accent)', fontWeight: 600, fontFamily: "'Space Grotesk', var(--font)", fontSize: 12 }}>
+                <Link href="/signup" className="auth-link">
                   Sign up
                 </Link>
               </div>
