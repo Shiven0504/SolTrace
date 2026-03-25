@@ -133,6 +133,22 @@ export default function SignupPage() {
           {/* Accent line */}
           <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 1, background: 'linear-gradient(90deg, var(--accent), var(--green))', opacity: 0.5 }} />
 
+          {/* Close button */}
+          <button
+            onClick={() => router.push('/')}
+            aria-label="Close"
+            style={{
+              position: 'absolute', top: 12, right: 12,
+              background: 'none', border: 'none', cursor: 'pointer',
+              color: 'var(--text-muted)', padding: 4, lineHeight: 1,
+              fontSize: 18, fontWeight: 300, transition: 'color 0.15s',
+            }}
+            onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--text-primary)')}
+            onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--text-muted)')}
+          >
+            &#x2715;
+          </button>
+
           {!pickUsername ? (
             <>
               <h1 style={{ fontSize: 22, fontWeight: 700, marginBottom: 4, letterSpacing: '-0.3px' }}>Sign up</h1>
