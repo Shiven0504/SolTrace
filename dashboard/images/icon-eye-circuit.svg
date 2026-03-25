@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <!-- Eye shape -->
+  <path d="M4 32S16 16 32 16s28 16 28 16S48 48 32 48 4 32 4 32Z" stroke="url(#ec1)" stroke-width="2.5" stroke-linejoin="round"/>
+  <!-- Iris -->
+  <circle cx="32" cy="32" r="8" stroke="#06b6d4" stroke-width="2.5"/>
+  <!-- Pupil -->
+  <circle cx="32" cy="32" r="3" fill="#06b6d4"/>
+  <!-- Circuit lines extending from eye -->
+  <line x1="4" y1="32" x2="4" y2="22" stroke="#6366f1" stroke-width="1.5" stroke-linecap="round" opacity="0.5"/>
+  <line x1="4" y1="22" x2="10" y2="22" stroke="#6366f1" stroke-width="1.5" stroke-linecap="round" opacity="0.5"/>
+  <line x1="60" y1="32" x2="60" y2="22" stroke="#6366f1" stroke-width="1.5" stroke-linecap="round" opacity="0.5"/>
+  <line x1="60" y1="22" x2="54" y2="22" stroke="#6366f1" stroke-width="1.5" stroke-linecap="round" opacity="0.5"/>
+  <line x1="4" y1="32" x2="4" y2="42" stroke="#06b6d4" stroke-width="1.5" stroke-linecap="round" opacity="0.5"/>
+  <line x1="4" y1="42" x2="10" y2="42" stroke="#06b6d4" stroke-width="1.5" stroke-linecap="round" opacity="0.5"/>
+  <line x1="60" y1="32" x2="60" y2="42" stroke="#06b6d4" stroke-width="1.5" stroke-linecap="round" opacity="0.5"/>
+  <line x1="60" y1="42" x2="54" y2="42" stroke="#06b6d4" stroke-width="1.5" stroke-linecap="round" opacity="0.5"/>
+  <!-- Circuit dots -->
+  <circle cx="10" cy="22" r="2" fill="#6366f1" opacity="0.5"/>
+  <circle cx="54" cy="22" r="2" fill="#6366f1" opacity="0.5"/>
+  <circle cx="10" cy="42" r="2" fill="#06b6d4" opacity="0.5"/>
+  <circle cx="54" cy="42" r="2" fill="#06b6d4" opacity="0.5"/>
+  <defs>
+    <linearGradient id="ec1" x1="4" y1="16" x2="60" y2="48">
+      <stop offset="0%" stop-color="#6366f1"/>
+      <stop offset="100%" stop-color="#06b6d4"/>
+    </linearGradient>
+  </defs>
+</svg>

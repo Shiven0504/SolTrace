@@ -1,0 +1,18 @@
+[package]
+name = "soltrace-decoder"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+solana-sdk = { workspace = true }
+solana-transaction-status = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+tracing = { workspace = true }
+thiserror = { workspace = true }
+chrono = { workspace = true }
+sha2 = { workspace = true }
+bs58 = "0.5"
+
+[lints]
+workspace = true

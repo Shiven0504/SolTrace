@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <!-- Hexagonal outline -->
+  <path d="M32 4L58 18V46L32 60L6 46V18Z" stroke="url(#heStroke)" stroke-width="3.5" fill="none"/>
+  <!-- Diamond pupil -->
+  <path d="M32 18L44 32L32 46L20 32Z" fill="url(#heFill)" stroke="url(#heInner)" stroke-width="2"/>
+  <!-- Center dot -->
+  <circle cx="32" cy="32" r="4" fill="#22d3ee"/>
+  <defs>
+    <linearGradient id="heStroke" x1="6" y1="4" x2="58" y2="60">
+      <stop offset="0%" stop-color="#818cf8"/>
+      <stop offset="100%" stop-color="#22d3ee"/>
+    </linearGradient>
+    <linearGradient id="heFill" x1="20" y1="18" x2="44" y2="46">
+      <stop offset="0%" stop-color="#6366f1" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#06b6d4" stop-opacity="0.15"/>
+    </linearGradient>
+    <linearGradient id="heInner" x1="20" y1="18" x2="44" y2="46">
+      <stop offset="0%" stop-color="#a78bfa" stop-opacity="0.7"/>
+      <stop offset="100%" stop-color="#22d3ee" stop-opacity="0.7"/>
+    </linearGradient>
+  </defs>
+</svg>

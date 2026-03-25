@@ -1,0 +1,27 @@
+[package]
+name = "soltrace"
+version.workspace = true
+edition.workspace = true
+
+[[bin]]
+name = "soltrace"
+path = "src/main.rs"
+
+[dependencies]
+soltrace-ingestion = { workspace = true }
+soltrace-decoder = { workspace = true }
+soltrace-storage = { workspace = true }
+soltrace-api = { workspace = true }
+tokio = { workspace = true }
+tracing = { workspace = true }
+tracing-subscriber = { workspace = true }
+anyhow = { workspace = true }
+config = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+sqlx = { workspace = true }
+redis = { workspace = true }
+axum = { workspace = true }
+
+[lints]
+workspace = true

@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="bg3" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#0a1628"/>
+      <stop offset="100%" stop-color="#111d33"/>
+    </linearGradient>
+    <linearGradient id="s3" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#00e5ff"/>
+      <stop offset="100%" stop-color="#22c55e"/>
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="14" fill="url(#bg3)"/>
+  <!-- Hexagon outline -->
+  <polygon points="32,8 54,20 54,44 32,56 10,44 10,20" stroke="url(#s3)" stroke-width="3" fill="none"/>
+  <!-- S path inside hexagon -->
+  <path d="M23 22h12a5 5 0 0 1 0 10H29a5 5 0 0 0 0 10h12" stroke="url(#s3)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+</svg>

@@ -1,0 +1,66 @@
+[workspace]
+resolver = "2"
+members = [
+    "crates/ingestion",
+    "crates/decoder",
+    "crates/storage",
+    "crates/api",
+    "crates/filter_dsl",
+    "bin/soltrace",
+]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.75"
+license = "MIT"
+
+[workspace.dependencies]
+# Solana
+solana-client = "2.1"
+solana-sdk = "2.1"
+solana-transaction-status = "2.1"
+
+# Web framework
+axum = "0.8"
+tower = "0.5"
+tower-http = { version = "0.6", features = ["cors", "trace"] }
+
+# Database
+sqlx = { version = "0.8", features = ["runtime-tokio", "postgres", "chrono"] }
+redis = { version = "0.27", features = ["tokio-comp", "streams"] }
+
+# Serialization
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+
+# Async
+tokio = { version = "1", features = ["full"] }
+futures = "0.3"
+
+# Utils
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+thiserror = "2"
+anyhow = "1"
+config = "0.14"
+chrono = { version = "0.4", features = ["serde"] }
+reqwest = { version = "0.12", features = ["json"] }
+uuid = { version = "1", features = ["v4"] }
+hmac = "0.12"
+sha2 = "0.10"
+hex = "0.4"
+jsonwebtoken = "9"
+argon2 = "0.5"
+
+# Workspace crates
+soltrace-ingestion = { path = "crates/ingestion" }
+soltrace-decoder = { path = "crates/decoder" }
+soltrace-storage = { path = "crates/storage" }
+soltrace-api = { path = "crates/api" }
+soltrace-filter-dsl = { path = "crates/filter_dsl" }
+
+[workspace.lints.clippy]
+pedantic = { level = "warn", priority = -1 }
+module_name_repetitions = "allow"
+must_use_candidate = "allow"

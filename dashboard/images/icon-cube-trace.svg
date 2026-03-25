@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <!-- Cube front face -->
+  <path d="M32 20L46 28V44L32 52L18 44V28Z" stroke="url(#ct1)" stroke-width="2.5" stroke-linejoin="round"/>
+  <!-- Cube top edge -->
+  <path d="M32 20L46 28L32 36L18 28Z" fill="#6366f1" fill-opacity="0.15" stroke="url(#ct1)" stroke-width="2.5" stroke-linejoin="round"/>
+  <!-- Cube center line -->
+  <line x1="32" y1="36" x2="32" y2="52" stroke="#6366f1" stroke-width="2" opacity="0.5"/>
+  <!-- Trace lines flowing left -->
+  <path d="M18 28C12 26 8 28 4 26" stroke="#06b6d4" stroke-width="2" stroke-linecap="round" opacity="0.7"/>
+  <path d="M18 36C12 34 8 36 4 34" stroke="#06b6d4" stroke-width="1.5" stroke-linecap="round" opacity="0.5"/>
+  <path d="M18 44C12 42 8 44 4 42" stroke="#06b6d4" stroke-width="1" stroke-linecap="round" opacity="0.3"/>
+  <!-- Trace lines flowing right -->
+  <path d="M46 28C52 26 56 28 60 26" stroke="#06b6d4" stroke-width="2" stroke-linecap="round" opacity="0.7"/>
+  <path d="M46 36C52 34 56 36 60 34" stroke="#06b6d4" stroke-width="1.5" stroke-linecap="round" opacity="0.5"/>
+  <path d="M46 44C52 42 56 44 60 42" stroke="#06b6d4" stroke-width="1" stroke-linecap="round" opacity="0.3"/>
+  <defs>
+    <linearGradient id="ct1" x1="18" y1="20" x2="46" y2="52">
+      <stop offset="0%" stop-color="#6366f1"/>
+      <stop offset="100%" stop-color="#06b6d4"/>
+    </linearGradient>
+  </defs>
+</svg>

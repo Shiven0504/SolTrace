@@ -1,0 +1,32 @@
+[solana]
+rpc_url = "https://api.devnet.solana.com"
+ws_url = "wss://api.devnet.solana.com"
+network = "devnet"
+
+[database]
+url = "postgres://soltrace:soltrace@localhost:5432/soltrace"
+max_connections = 10
+
+[redis]
+url = "redis://127.0.0.1:6379"
+
+[ingestion]
+# Reconnect backoff settings
+initial_backoff_ms = 500
+max_backoff_ms = 30000
+# Slot cursor key in Redis
+slot_cursor_key = "soltrace:last_slot"
+
+[api]
+host = "0.0.0.0"
+port = 3000
+
+[backfill]
+# Delay between RPC calls to avoid rate limiting (ms)
+rate_limit_ms = 200
+# Max signatures per getSignaturesForAddress call
+batch_size = 100
+
+[auth]
+jwt_secret = "soltrace-dev-secret-change-in-production"
+jwt_expiry_hours = 72

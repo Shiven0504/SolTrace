@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="bg5" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#0a1628"/>
+      <stop offset="100%" stop-color="#111d33"/>
+    </linearGradient>
+    <linearGradient id="s5" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#00e5ff"/>
+      <stop offset="100%" stop-color="#22c55e"/>
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="14" fill="url(#bg5)"/>
+  <!-- Shield outline -->
+  <path d="M32 10 L50 20 V36 C50 46 42 54 32 56 C22 54 14 46 14 36 V20 Z" stroke="url(#s5)" stroke-width="3" fill="none"/>
+  <!-- Chain link inside shield -->
+  <rect x="22" y="25" width="10" height="6" rx="3" stroke="url(#s5)" stroke-width="2.5" fill="none"/>
+  <rect x="32" y="33" width="10" height="6" rx="3" stroke="url(#s5)" stroke-width="2.5" fill="none"/>
+  <line x1="30" y1="31" x2="34" y2="33" stroke="url(#s5)" stroke-width="2.5" stroke-linecap="round"/>
+</svg>

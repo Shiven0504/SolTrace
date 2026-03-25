@@ -1,0 +1,30 @@
+# Build
+target/
+*.exe
+
+# Environment & secrets
+.env
+.env.*
+config/production.toml
+
+# Node
+dashboard/node_modules/
+dashboard/.next/
+dashboard/.vite/
+dashboard/.env.local
+
+# IDE
+.idea/
+.vscode/
+*.swp
+
+# Temp preview files
+dashboard/public/icon-preview.html
+
+# Project notes (internal reference only)
+CLAUDE.md
+tasks.md
+
+# OS
+.DS_Store
+Thumbs.db

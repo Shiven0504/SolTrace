@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <!-- Solid hexagon body -->
+  <path d="M32 4L58 18V46L32 60L6 46V18Z" fill="url(#hpFill)" stroke="url(#hpStroke)" stroke-width="3"/>
+  <!-- Trace path cutting through -->
+  <path d="M14 32h36" stroke="#22d3ee" stroke-width="4" stroke-linecap="round" opacity="0.9"/>
+  <!-- Data nodes on the path -->
+  <circle cx="20" cy="32" r="3.5" fill="#a78bfa"/>
+  <circle cx="32" cy="32" r="3.5" fill="#22d3ee"/>
+  <circle cx="44" cy="32" r="3.5" fill="#818cf8"/>
+  <defs>
+    <linearGradient id="hpFill" x1="6" y1="4" x2="58" y2="60">
+      <stop offset="0%" stop-color="#6366f1" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#06b6d4" stop-opacity="0.15"/>
+    </linearGradient>
+    <linearGradient id="hpStroke" x1="6" y1="4" x2="58" y2="60">
+      <stop offset="0%" stop-color="#818cf8"/>
+      <stop offset="100%" stop-color="#22d3ee"/>
+    </linearGradient>
+  </defs>
+</svg>

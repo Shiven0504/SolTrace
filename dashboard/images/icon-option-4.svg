@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="bg4" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#0a1628"/>
+      <stop offset="100%" stop-color="#111d33"/>
+    </linearGradient>
+    <linearGradient id="s4" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#00e5ff"/>
+      <stop offset="100%" stop-color="#22c55e"/>
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="14" fill="url(#bg4)"/>
+  <!-- Three horizontal bars (Solana-style) with trace/scan line -->
+  <line x1="14" y1="20" x2="50" y2="20" stroke="url(#s4)" stroke-width="4" stroke-linecap="round"/>
+  <line x1="14" y1="32" x2="50" y2="32" stroke="url(#s4)" stroke-width="4" stroke-linecap="round"/>
+  <line x1="14" y1="44" x2="50" y2="44" stroke="url(#s4)" stroke-width="4" stroke-linecap="round"/>
+  <!-- Diagonal scan trace line -->
+  <line x1="42" y1="14" x2="22" y2="50" stroke="#00e5ff" stroke-width="2.5" stroke-linecap="round" opacity="0.7"/>
+  <circle cx="42" cy="14" r="3" fill="#00e5ff"/>
+  <circle cx="22" cy="50" r="3" fill="#22c55e"/>
+</svg>
