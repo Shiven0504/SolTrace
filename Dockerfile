@@ -30,6 +30,7 @@ RUN cargo build --release --bin soltrace 2>/dev/null || true
 # Copy real source code
 COPY crates/ crates/
 COPY bin/ bin/
+COPY migrations/ migrations/
 
 # Touch source files to invalidate the dummy builds
 RUN touch crates/ingestion/src/lib.rs crates/decoder/src/lib.rs \
