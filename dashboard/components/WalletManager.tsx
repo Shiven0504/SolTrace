@@ -34,9 +34,11 @@ export default function WalletManager() {
   const [deleting, setDeleting] = useState<string | null>(null);
   const [backfilling, setBackfilling] = useState<string | null>(null);
 
+  const [confirmDelete, setConfirmDelete] = useState<string | null>(null);
+
   const handleDelete = async (pubkey: string) => {
-    if (!confirm('Remove this wallet from your watch list?')) return;
     setDeleting(pubkey);
+    setConfirmDelete(null);
     try {
       await deleteApi(`/wallets/${pubkey}`);
       refetch();
@@ -110,7 +112,10 @@ export default function WalletManager() {
                 wallet={w}
                 expanded={expanded === w.wallet_pubkey}
                 onToggle={() => setExpanded(expanded === w.wallet_pubkey ? null : w.wallet_pubkey)}
-                onDelete={() => handleDelete(w.wallet_pubkey)}
+                onDelete={() => setConfirmDelete(w.wallet_pubkey)}
+                confirmingDelete={confirmDelete === w.wallet_pubkey}
+                onConfirmDelete={() => handleDelete(w.wallet_pubkey)}
+                onCancelDelete={() => setConfirmDelete(null)}
                 onBackfill={() => handleBackfill(w.wallet_pubkey)}
                 deleting={deleting === w.wallet_pubkey}
                 backfilling={backfilling === w.wallet_pubkey}
@@ -131,9 +136,12 @@ interface WalletCardProps {
   onBackfill: () => void;
   deleting: boolean;
   backfilling: boolean;
+  confirmingDelete: boolean;
+  onConfirmDelete: () => void;
+  onCancelDelete: () => void;
 }
 
-function WalletCard({ wallet, expanded, onToggle, onDelete, onBackfill, deleting, backfilling }: WalletCardProps) {
+function WalletCard({ wallet, expanded, onToggle, onDelete, onBackfill, deleting, backfilling, confirmingDelete, onConfirmDelete, onCancelDelete }: WalletCardProps) {
   const { data: balances } = useApi<Balance[]>(`/balances?wallet=${wallet.wallet_pubkey}`, { autoFetch: expanded });
   const { data: transfers } = useApi<Transfer[]>(`/transfers?wallet=${wallet.wallet_pubkey}&limit=10`, { autoFetch: expanded });
 
@@ -212,15 +220,55 @@ function WalletCard({ wallet, expanded, onToggle, onDelete, onBackfill, deleting
           title="Remove wallet"
           style={{
             background: 'none', border: 'none', cursor: deleting ? 'wait' : 'pointer',
-            padding: '4px 6px', color: 'var(--text-muted)', fontSize: 14, lineHeight: 1,
-            transition: 'color 0.15s',
+            padding: '4px 6px', color: 'var(--text-muted)', lineHeight: 1,
+            transition: 'color 0.15s', display: 'flex', alignItems: 'center',
           }}
           onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--red)')}
           onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--text-muted)')}
         >
-          &#x1F5D1;
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <polyline points="3 6 5 6 21 6" />
+            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+            <line x1="10" y1="11" x2="10" y2="17" />
+            <line x1="14" y1="11" x2="14" y2="17" />
+          </svg>
         </button>
       </button>
+
+      {confirmingDelete && (
+        <div style={{
+          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+          padding: '10px 16px', background: 'var(--bg-surface)',
+          borderTop: '1px solid var(--border)',
+          animation: 'fadeUp 0.15s ease-out',
+        }}>
+          <span style={{ fontFamily: 'var(--mono)', fontSize: 11, color: 'var(--text-secondary)', letterSpacing: '0.3px' }}>
+            Remove this wallet?
+          </span>
+          <div style={{ display: 'flex', gap: 8 }}>
+            <button
+              onClick={onCancelDelete}
+              style={{
+                background: 'none', border: '1px solid var(--border)', borderRadius: 4,
+                padding: '4px 12px', cursor: 'pointer', fontFamily: 'var(--mono)',
+                fontSize: 10, color: 'var(--text-muted)', letterSpacing: '0.5px',
+              }}
+            >
+              Cancel
+            </button>
+            <button
+              onClick={onConfirmDelete}
+              style={{
+                background: 'var(--red-dim)', border: '1px solid rgba(239,68,68,0.2)', borderRadius: 4,
+                padding: '4px 12px', cursor: 'pointer', fontFamily: 'var(--mono)',
+                fontSize: 10, color: 'var(--red)', letterSpacing: '0.5px', fontWeight: 600,
+              }}
+            >
+              Remove
+            </button>
+          </div>
+        </div>
+      )}
 
       {expanded && (
         <div style={{ padding: '0 16px 16px', borderTop: '1px solid var(--border-subtle)', animation: 'fadeUp 0.2s ease-out' }}>
