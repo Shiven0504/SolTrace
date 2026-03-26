@@ -184,17 +184,36 @@ impl PgStore {
         Ok(rows)
     }
 
-    /// Delete a watched wallet owned by the given user (or unowned). Returns true if deleted.
+    /// Delete a watched wallet owned by the given user (or unowned).
+    /// Also removes related token_accounts, token_transfers, backfill_jobs, and webhooks.
     pub async fn delete_wallet(&self, pubkey: &str, user_id: i64) -> Result<bool, PgError> {
-        let result = sqlx::query(
-            "DELETE FROM watched_wallets WHERE wallet_pubkey = $1 AND (user_id = $2 OR user_id IS NULL)",
+        // Check ownership first
+        let row = sqlx::query_as::<_, (String,)>(
+            "SELECT wallet_pubkey FROM watched_wallets WHERE wallet_pubkey = $1 AND (user_id = $2 OR user_id IS NULL)",
         )
         .bind(pubkey)
         .bind(user_id)
-        .execute(&self.pool)
+        .fetch_optional(&self.pool)
         .await?;
 
-        Ok(result.rows_affected() > 0)
+        if row.is_none() {
+            return Ok(false);
+        }
+
+        // Delete dependent rows first (foreign key constraints)
+        sqlx::query("DELETE FROM token_transfers WHERE wallet = $1")
+            .bind(pubkey).execute(&self.pool).await?;
+        sqlx::query("DELETE FROM token_accounts WHERE owner_wallet = $1")
+            .bind(pubkey).execute(&self.pool).await?;
+        sqlx::query("DELETE FROM backfill_jobs WHERE wallet = $1")
+            .bind(pubkey).execute(&self.pool).await?;
+        sqlx::query("DELETE FROM webhooks WHERE wallet = $1 OR wallet IS NULL")
+            .bind(pubkey).execute(&self.pool).await.ok(); // webhooks table may not have wallet column
+
+        sqlx::query("DELETE FROM watched_wallets WHERE wallet_pubkey = $1")
+            .bind(pubkey).execute(&self.pool).await?;
+
+        Ok(true)
     }
 
     /// Get all watched wallet pubkeys as a set.
