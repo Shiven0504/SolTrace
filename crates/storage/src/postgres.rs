@@ -152,7 +152,9 @@ impl PgStore {
         let row = sqlx::query_as::<_, WatchedWallet>(
             r#"INSERT INTO watched_wallets (wallet_pubkey, label, user_id)
                VALUES ($1, $2, $3)
-               ON CONFLICT (wallet_pubkey) DO UPDATE SET label = COALESCE($2, watched_wallets.label)
+               ON CONFLICT (wallet_pubkey) DO UPDATE
+               SET label = COALESCE($2, watched_wallets.label),
+                   user_id = $3
                RETURNING wallet_pubkey, label, created_at, user_id"#,
         )
         .bind(pubkey)
@@ -182,10 +184,10 @@ impl PgStore {
         Ok(rows)
     }
 
-    /// Delete a watched wallet owned by the given user. Returns true if deleted.
+    /// Delete a watched wallet owned by the given user (or unowned). Returns true if deleted.
     pub async fn delete_wallet(&self, pubkey: &str, user_id: i64) -> Result<bool, PgError> {
         let result = sqlx::query(
-            "DELETE FROM watched_wallets WHERE wallet_pubkey = $1 AND user_id = $2",
+            "DELETE FROM watched_wallets WHERE wallet_pubkey = $1 AND (user_id = $2 OR user_id IS NULL)",
         )
         .bind(pubkey)
         .bind(user_id)
