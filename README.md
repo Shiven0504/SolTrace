@@ -246,6 +246,7 @@ curl -X POST http://localhost:3000/wallets \
 | Method | Path                     | Description                                    |
 |--------|--------------------------|------------------------------------------------|
 | POST   | `/wallets`               | Add a wallet to the watch list                 |
+| DELETE | `/wallets/{pubkey}`      | Remove a wallet and its related data           |
 | POST   | `/backfill`              | Start a historical backfill job for a wallet   |
 | POST   | `/webhooks`              | Register a webhook with event filters          |
 | DELETE | `/webhooks/{id}`         | Delete a webhook                               |
@@ -363,13 +364,19 @@ SOLTRACE__AUTH__GOOGLE_CLIENT_ID=your-google-client-id.apps.googleusercontent.co
 ## Screenshots
 
 ### Dashboard Overview
-![Dashboard Overview](docs/screenshots/dashboard-overview.png)
+![Dashboard Overview](docs/screenshots/dashboard.PNG)
 
 ### Transfers
-![Transfers](docs/screenshots/transfers.png)
+![Transfers](docs/screenshots/transfers.PNG)
+
+### Wallets
+![Wallets](docs/screenshots/wallets.PNG)
 
 ### Indexer Health
-![Indexer Health](docs/screenshots/indexer-health.png)
+![Indexer Health](docs/screenshots/indexer-health.PNG)
+
+### Sign In
+![Sign In](docs/screenshots/sign-in.PNG)
 
 ---
 
