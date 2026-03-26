@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, type FormEvent } from 'react';
-import { useApi, postApi } from '@/hooks/useApi';
+import { useApi, postApi, deleteApi } from '@/hooks/useApi';
 import { useAuth } from '@/hooks/useAuth';
 
 interface Wallet {
@@ -31,6 +31,32 @@ export default function WalletManager() {
   const [adding, setAdding] = useState(false);
   const [addError, setAddError] = useState<string | null>(null);
   const [expanded, setExpanded] = useState<string | null>(null);
+  const [deleting, setDeleting] = useState<string | null>(null);
+  const [backfilling, setBackfilling] = useState<string | null>(null);
+
+  const handleDelete = async (pubkey: string) => {
+    if (!confirm('Remove this wallet from your watch list?')) return;
+    setDeleting(pubkey);
+    try {
+      await deleteApi(`/wallets/${pubkey}`);
+      refetch();
+    } catch {
+      // ignore
+    } finally {
+      setDeleting(null);
+    }
+  };
+
+  const handleBackfill = async (pubkey: string) => {
+    setBackfilling(pubkey);
+    try {
+      await postApi('/backfill', { wallet: pubkey });
+    } catch {
+      // ignore
+    } finally {
+      setBackfilling(null);
+    }
+  };
 
   const handleAdd = async (e: FormEvent) => {
     e.preventDefault();
@@ -84,6 +110,10 @@ export default function WalletManager() {
                 wallet={w}
                 expanded={expanded === w.wallet_pubkey}
                 onToggle={() => setExpanded(expanded === w.wallet_pubkey ? null : w.wallet_pubkey)}
+                onDelete={() => handleDelete(w.wallet_pubkey)}
+                onBackfill={() => handleBackfill(w.wallet_pubkey)}
+                deleting={deleting === w.wallet_pubkey}
+                backfilling={backfilling === w.wallet_pubkey}
               />
             ))}
           </div>
@@ -97,9 +127,13 @@ interface WalletCardProps {
   wallet: Wallet;
   expanded: boolean;
   onToggle: () => void;
+  onDelete: () => void;
+  onBackfill: () => void;
+  deleting: boolean;
+  backfilling: boolean;
 }
 
-function WalletCard({ wallet, expanded, onToggle }: WalletCardProps) {
+function WalletCard({ wallet, expanded, onToggle, onDelete, onBackfill, deleting, backfilling }: WalletCardProps) {
   const { data: balances } = useApi<Balance[]>(`/balances?wallet=${wallet.wallet_pubkey}`, { autoFetch: expanded });
   const { data: transfers } = useApi<Transfer[]>(`/transfers?wallet=${wallet.wallet_pubkey}&limit=10`, { autoFetch: expanded });
 
@@ -158,6 +192,34 @@ function WalletCard({ wallet, expanded, onToggle }: WalletCardProps) {
           </span>
         )}
         <span style={{ fontFamily: 'var(--mono)', fontSize: 10, color: 'var(--text-muted)', letterSpacing: '0.3px' }}>{formatTime(wallet.created_at)}</span>
+        <button
+          onClick={(e) => { e.stopPropagation(); onBackfill(); }}
+          disabled={backfilling}
+          title="Backfill historical transactions"
+          style={{
+            background: 'none', border: '1px solid var(--border)', borderRadius: 4,
+            cursor: backfilling ? 'wait' : 'pointer', padding: '4px 8px',
+            color: backfilling ? 'var(--text-muted)' : 'var(--accent)',
+            fontFamily: 'var(--mono)', fontSize: 9, letterSpacing: '0.5px',
+            transition: 'all 0.15s',
+          }}
+        >
+          {backfilling ? 'Syncing...' : 'Backfill'}
+        </button>
+        <button
+          onClick={(e) => { e.stopPropagation(); onDelete(); }}
+          disabled={deleting}
+          title="Remove wallet"
+          style={{
+            background: 'none', border: 'none', cursor: deleting ? 'wait' : 'pointer',
+            padding: '4px 6px', color: 'var(--text-muted)', fontSize: 14, lineHeight: 1,
+            transition: 'color 0.15s',
+          }}
+          onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--red)')}
+          onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--text-muted)')}
+        >
+          &#x1F5D1;
+        </button>
       </button>
 
       {expanded && (

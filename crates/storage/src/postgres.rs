@@ -182,6 +182,19 @@ impl PgStore {
         Ok(rows)
     }
 
+    /// Delete a watched wallet owned by the given user. Returns true if deleted.
+    pub async fn delete_wallet(&self, pubkey: &str, user_id: i64) -> Result<bool, PgError> {
+        let result = sqlx::query(
+            "DELETE FROM watched_wallets WHERE wallet_pubkey = $1 AND user_id = $2",
+        )
+        .bind(pubkey)
+        .bind(user_id)
+        .execute(&self.pool)
+        .await?;
+
+        Ok(result.rows_affected() > 0)
+    }
+
     /// Get all watched wallet pubkeys as a set.
     pub async fn watched_pubkeys(&self) -> Result<std::collections::HashSet<String>, PgError> {
         let rows: Vec<(String,)> =

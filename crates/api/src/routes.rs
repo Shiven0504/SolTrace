@@ -53,6 +53,7 @@ pub fn build_router(
         .route("/tx/{signature}", get(handlers::get_transaction))
         .route("/wallets", post(handlers::add_wallet))
         .route("/wallets", get(handlers::list_wallets))
+        .route("/wallets/{pubkey}", delete(handlers::delete_wallet))
         .route("/health", get(handlers::health_check))
         // Phase 2: Backfill
         .route("/backfill", post(handlers::start_backfill))

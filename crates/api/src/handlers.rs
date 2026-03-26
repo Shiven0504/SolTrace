@@ -135,6 +135,27 @@ pub async fn list_wallets(
     }
 }
 
+/// `DELETE /wallets/:pubkey` — Remove a wallet from the watch list (requires auth).
+pub async fn delete_wallet(
+    State(state): State<AppState>,
+    auth: AuthUser,
+    Path(pubkey): Path<String>,
+) -> impl IntoResponse {
+    match state.pg_store.delete_wallet(&pubkey, auth.0.sub).await {
+        Ok(true) => {
+            let _ = state.wallet_changed_tx.send(());
+            Ok(StatusCode::NO_CONTENT)
+        }
+        Ok(false) => Err((
+            StatusCode::NOT_FOUND,
+            Json(ErrorResponse {
+                error: "wallet not found or not owned by you".into(),
+            }),
+        )),
+        Err(e) => Err(internal_error(e)),
+    }
+}
+
 /// `GET /health` — Indexer status, last processed slot, lag.
 pub async fn health_check(State(state): State<AppState>) -> impl IntoResponse {
     let last_slot = state.redis_cache.get_last_slot().await.unwrap_or(None);
